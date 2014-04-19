@@ -1,17 +1,135 @@
 package br.com.ufpb.projetolp.lojaconstrucao;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.ClienteExistenteException;
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.FabricanteExistenteException;
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.FuncionarioExistenteException;
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.IdadeInvalidaException;
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.ProdutoExistenteException;
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.QuantidadeInvalidaException;
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.SexoInvalidoException;
+import br.com.ufpb.projetolp.lojaconstrucao.excecoes.ValorInvalidoException;
 
 public class LojaTest {
 
-	@Test
-	public void CadastraUmProduto() {
-		Loja loja1 = new Loja(2, 0, 0, 0);
+	@Test(expected = QuantidadeInvalidaException.class)
+	public void TratamentoExcecaoQuantInvalida() {
+		Loja loja1 = new Loja(5, 5, 6, 1);
 		Produto produto1 = new Produto();
-		produto1.getNome();
-		produto1.getCategoria();
+		produto1.setQuant(-5);
+		produto1.setPreco(1.50);
+		loja1.FazerCompraCliente(produto1, -5);
+		Produto produtoSalvo1 = (produto1);
+		assertEquals(1.50, produtoSalvo1.getPreco(), 0.1);
+		assertEquals("Quantidade Negativa", produtoSalvo1.getQuant());
+	}
 
+	@Test(expected = ValorInvalidoException.class)
+	public void TratamentoExcecaoPrecoInvalido() {
+		Loja loja1 = new Loja(2, 2, 2, 2);
+		Produto produto1 = new Produto();
+		produto1.setQuant(10);
+		produto1.setPreco(-2.50);
+		loja1.FazerCompraCliente(produto1, 10);
+		Produto produtoSalvo1 = (produto1);
+		assertEquals(1.50, produtoSalvo1.getPreco(), 0.1);
+		assertEquals(10, produtoSalvo1.getQuant());
+		assertEquals("Valor impossivel, está abaixo de R$ 0,00",
+				produtoSalvo1.getPreco());
+	}
+
+	@Test(expected = IdadeInvalidaException.class)
+	public void TratamentoExcecaoIdadeInvalida() {
+		Loja loja1 = new Loja(5, 4, 5, 5);
+		Funcionario funcionario1 = new Funcionario();
+		funcionario1.setNome("Lidiane Paiva");
+		funcionario1.setIdade(-1);
+		loja1.validaIdadeFuncionario(funcionario1);
+		Funcionario funcionarioSalvo1 = (funcionario1);
+		assertEquals("Idade Inválida!!!!", funcionarioSalvo1.getIdade());
+
+	}
+
+	@Test(expected = SexoInvalidoException.class)
+	public void TratamentoExcecaoHorarioFuncionario() {
+		Loja loja1 = new Loja(5, 5, 5, 5);
+		Funcionario funcionario1 = new Funcionario();
+		funcionario1.setNome("Lidiane Paiva");
+		funcionario1.setSexo("Indefinido");
+		loja1.defineHorario(funcionario1);
+		Funcionario funcionarioSalvo1 = (funcionario1);
+		assertEquals("O Sexo informado é Invalido!!!",
+				funcionarioSalvo1.getSexo());
+
+	}
+
+	@Test(expected = ProdutoExistenteException.class)
+	public void TratarExcecaoProdutoExistente() {
+		Loja loja1 = new Loja(3, 4, 3, 3);
+		Produto produto1 = new Produto();
+		Produto produto2 = new Produto();
+		produto1.setNome("Parafuso 1/2");
+		produto2.setNome("Parafuso 1/2");
+		loja1.cadastrarProduto(produto1);
+		loja1.cadastrarProduto(produto2);
+		Produto produtoSalvo1 = (produto1);
+		assertEquals("Parafuso 1/2", produtoSalvo1.getNome());
+		assertEquals("O Produto Informado já foi Cadastrado Antes!!!",
+				produto2.getNome());
+	}
+
+	@Test(expected = FuncionarioExistenteException.class)
+	public void TratarExcecaoFuncionarioExistente() {
+		Loja loja1 = new Loja(5, 4, 3, 3);
+		Funcionario funcionario1 = new Funcionario();
+		Funcionario funcionario2 = new Funcionario();
+		funcionario1.setNome("Marcos Uchoa");
+		funcionario1.setCpf("101.233.333-44");
+		funcionario2.setNome("Marcos Uchoa");
+		funcionario2.setCpf("101.233.333-44");
+		loja1.cadastrarFuncionario(funcionario1);
+		loja1.cadastrarFuncionario(funcionario2);
+		Funcionario funcionarioSalvo1 = (funcionario1);
+		assertEquals("101.233.333-44", funcionarioSalvo1.getCpf());
+		assertEquals("Funcionário informado já está cadastrado!!!",
+				funcionario2.getCpf());
+	}
+
+	@Test(expected = FabricanteExistenteException.class)
+	public void TratarExcecaoFabricanteExistente() {
+		Loja loja1 = new Loja(5, 4, 3, 3);
+		Fabricante fabricante1 = new Fabricante();
+		Fabricante fabricante2 = new Fabricante();
+		fabricante1.setNomeFantasia("Tigre");
+		fabricante1.setCnpj("0001.2233.2333-44");
+		fabricante2.setNomeFantasia("Lidiane Paiva");
+		fabricante2.setCnpj("0001.2233.2333-44");
+		loja1.cadastrarFabricante(fabricante1);
+		loja1.cadastrarFabricante(fabricante2);
+		Fabricante fabricanteSalvo1 = (fabricante1);
+		assertEquals("0001.2233.2333-44", fabricanteSalvo1.getCnpj());
+		assertEquals("Fabricante informado já está cadastrado!!!",
+				fabricante2.getCnpj());
+	}
+
+	@Test(expected = ClienteExistenteException.class)
+	public void TratarExcecaoClienteExistente() {
+		Loja loja1 = new Loja(3, 3, 3, 3);
+		Cliente cliente1 = new Cliente();
+		Cliente cliente2 = new Cliente();
+		cliente1.setNome("Lidiane Paiva");
+		cliente1.setCpf("733.233.333-44");
+		cliente2.setNome("Lidiane Paiva");
+		cliente2.setCpf("733.233.333-44");
+		loja1.cadastrarCliente(cliente1);
+		loja1.cadastrarCliente(cliente2);
+		Cliente clienteSalvo1 = (cliente1);
+		assertEquals("733.233.333-44", clienteSalvo1.getCpf());
+		assertEquals("Cliente informado já está cadastrado!!!",
+				cliente2.getCpf());
 	}
 
 	@Test
@@ -67,12 +185,18 @@ public class LojaTest {
 		Produto produto1 = new Produto();
 		Produto produto2 = new Produto();
 		Produto produto3 = new Produto();
+		produto1.setNome("Parafuso");
+		produto2.setNome("Torneira");
+		produto3.setNome("Calha");
 		loja1.cadastrarProduto(produto1);
 		loja1.cadastrarProduto(produto2);
 		loja1.cadastrarProduto(produto3);
-		assertEquals(produto1, loja1.getProduto(0));
-		assertEquals(produto2, loja1.getProduto(1));
-		assertEquals(produto3, loja1.getProduto(2));
+		Produto produtoSalvo1 = (produto1);
+		Produto produtoSalvo2 = (produto2);
+		Produto produtoSalvo3 = (produto3);
+		assertEquals(produtoSalvo1, loja1.getProduto(0));
+		assertEquals(produtoSalvo2, loja1.getProduto(1));
+		assertEquals(produtoSalvo3, loja1.getProduto(2));
 		assertEquals(5, loja1.getCapacidadeProdutos());
 
 	}
@@ -205,9 +329,15 @@ public class LojaTest {
 		Loja loja1 = new Loja(5, 0, 0, 0);
 		Produto produto1 = new Produto();
 		Produto produto2 = new Produto();
+		produto1.setNome("Parafuso");
+		produto1.setQuant(500);
+		produto2.setNome("Torneira 3/4");
+		produto2.setQuant(250);
 		loja1.cadastrarProduto(produto1);
 		loja1.cadastrarProduto(produto2);
-		assertEquals(10, loja1.ReportarAlvaria(produto1, 10));
-		assertEquals(8, loja1.ReportarAlvaria(produto2, 8));
+		Produto produtoSalvo1 = (produto1);
+		Produto produtoSalvo2 = (produto2);
+		assertEquals(10, loja1.ReportarAlvaria(produtoSalvo1, 10));
+		assertEquals(8, loja1.ReportarAlvaria(produtoSalvo2, 8));
 	}
 }
