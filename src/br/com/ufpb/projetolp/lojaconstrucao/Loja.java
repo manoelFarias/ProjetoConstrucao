@@ -62,8 +62,8 @@ public class Loja {
 
 	// Definir Horario do Funcionario ===>
 	public String defineHorario(Funcionario funcionario) {
-		if ((funcionario.getSexo() != "feminino")
-				&& (funcionario.getSexo() != "masculino")) {
+		if ((funcionario.getSexo() != "feminino")&&
+			(funcionario.getSexo() != "masculino")) {
 			throw new SexoInvalidoException("O Sexo informado é Invalido!!!");
 		} else if (funcionario.getSexo() == "feminino") {
 			return "Horário Diurno";
@@ -72,7 +72,7 @@ public class Loja {
 		}
 	}
 
-	// Validação da idade do funcionario
+	// Validação da idade do funcionario ===>
 	public String validaIdadeFuncionario(Funcionario funcionario) {
 		if (funcionario.getIdade() < 0) {
 			throw new IdadeInvalidaException("Idade Inválida!!!!");
@@ -83,7 +83,7 @@ public class Loja {
 		}
 	}
 
-	// Cadastrar o Produto
+	// Cadastrar o Produto ===>
 	public void cadastrarProduto(Produto novoProduto) {
 		for (Produto produtoAntigo : produtos) {
 
@@ -96,7 +96,7 @@ public class Loja {
 		produtos[contProdutos++] = novoProduto;
 	}
 
-	// Cadastrar Funcionario
+	// Cadastrar Funcionario ===>
 	public void cadastrarFuncionario(Funcionario novoFuncionario) {
 		for (Funcionario funcionarioAntigo : funcionarios) {
 
@@ -109,7 +109,7 @@ public class Loja {
 		funcionarios[contFuncionarios++] = novoFuncionario;
 	}
 
-	// Cadastrar Cliente
+	// Cadastrar Cliente ===>
 	public void cadastrarCliente(Cliente novoCliente) {
 		for (Cliente clienteAntigo : clientes) {
 
@@ -122,7 +122,7 @@ public class Loja {
 		clientes[contClientes++] = novoCliente;
 	}
 
-	// Cadastrar Fabricante
+	// Cadastrar Fabricante ===>
 	public void cadastrarFabricante(Fabricante novoFabricante) {
 		for (Fabricante fabricanteAntigo : fabricantes) {
 
