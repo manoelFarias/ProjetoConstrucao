@@ -35,7 +35,6 @@ public class LojaTest {
 		produto1.setPreco(-2.50);
 		loja1.FazerCompraCliente(produto1, 10);
 		Produto produtoSalvo1 = (produto1);
-		assertEquals(1.50, produtoSalvo1.getPreco(), 0.1);
 		assertEquals(10, produtoSalvo1.getQuant());
 		assertEquals("Valor impossivel, está abaixo de R$ 0,00",
 				produtoSalvo1.getPreco());
