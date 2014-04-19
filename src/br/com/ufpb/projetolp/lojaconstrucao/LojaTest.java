@@ -53,7 +53,7 @@ public class LojaTest {
 	}
 
 	@Test(expected = SexoInvalidoException.class)
-	public void TratamentoExcecaoHorarioFuncionario() {
+	public void TratamentoExcecaoSexoInvalido() {
 		Loja loja1 = new Loja(5, 5, 5, 5);
 		Funcionario funcionario1 = new Funcionario();
 		funcionario1.setNome("Lidiane Paiva");
